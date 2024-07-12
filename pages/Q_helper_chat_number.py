@@ -12,6 +12,9 @@ from menu_streamlit import menu_with_redirect
 if "messages" not in st.session_state:
     st.session_state.messages = []
     
+if st.session_state.add_question == []  :
+    st.session_state.add_question = ['']
+    
 def LLM_respond_Q(msg_log):
     """채팅 내용을 기반으로 질문을 함"""
 

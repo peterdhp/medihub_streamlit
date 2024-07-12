@@ -65,7 +65,7 @@ def question_generator(model):
     number_output_parser = NumberedListOutputParser()
     format_instructions=number_output_parser.get_format_instructions()
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a Korean doctor consulting a patient. When given a medical complaint, ask 5 or less most important questions that would help you with the consultation.\n{}".format(format_instructions)),
+        ("system", "You are a Korean doctor consulting a patient. When given a medical complaint, ask questions that would help you answer the question. The maximum number of questions should be 5. If no question need to be asked, output empty list. \n{}".format(format_instructions)),
         ("user", "\n{question}")
     ])
 
@@ -89,7 +89,10 @@ with st.form(key='demographics_form'):
     st.text_area('어떤 것이 궁금하신가요? 의사가 직접 답변드립니다.', placeholder='가능한 자세히 작성하실수록 더 정확한 답변을 드릴 수 있습니다.',key='_question', height=200)
     
     if st.form_submit_button("등록하기",on_click = submit):
-        st.switch_page('pages/Q_helper_chat_number.py')
+        print(st.session_state.add_question)
+        st.switch_page('pages/Q_helper_chat_stopToken.py')
+        
+
     
 
 with st.sidebar:

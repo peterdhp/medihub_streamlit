@@ -8,9 +8,9 @@ if 'role' not in st.session_state :
 def authenticated_menu():
     # Show a navigation menu for authenticated users
     st.sidebar.page_link("app_streamlit.py", label="질문하기")
-    if st.session_state.status in ["text", "chat","response"]:
-        if st.session_state.role in ['patient','admin'] :
-            st.sidebar.page_link("pages/Q_helper_chat_number.py", label="질문 보완하기 (개수에 따라)")
+    #if st.session_state.status in ["text", "chat","response"]:
+        #if st.session_state.role in ['patient','admin'] :
+        #    st.sidebar.page_link("pages/Q_helper_chat_number.py", label="질문 보완하기 (개수에 따라)")
             
     if st.session_state.status in ["text", "chat","response"]:
         if st.session_state.role in ['patient','admin'] :
