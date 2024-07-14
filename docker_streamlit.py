@@ -9,6 +9,8 @@ from langchain_core.runnables import (
     RunnableParallel,
     RunnablePassthrough,
 )
+import os
+from langsmith import traceable
 
 
 
@@ -21,6 +23,7 @@ if 'add_question' not in st.session_state:
 if 'question' not in st.session_state:
     st.session_state.question = ''
     
+
 def LLM_respond_Q(msg_log):
     """채팅 내용을 기반으로 질문을 함"""
 
