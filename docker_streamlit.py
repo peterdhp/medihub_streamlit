@@ -182,8 +182,10 @@ if userinput := st.chat_input("메시지를 입력해주세요."):
             st.write('해당 내용이 맞다면 등록하기 버튼을 눌러주세요.')
 
             st.session_state.messages.append(('ai','답변해주셔서 감사합니다. 환자분께서 말씀해주신 것을 요약해보겠습니다.\n\n'+st.session_state.additional_information + '\n\n해당 내용이 맞다면 등록하기 버튼을 눌러주세요.'))
-            if st.button("등록하기") :
-                st.info("질문이 등록되었습니다.", icon="✅")
-                st.switch_page("docker_A_helper.py")
+            st.page_link("docker_A_helper.py",label="등록하기")
+            
+            # if st.button("등록하기") :
+            #     st.info("질문이 등록되었습니다.", icon="✅")
+            #     st.switch_page("docker_A_helper.py")
     
     
