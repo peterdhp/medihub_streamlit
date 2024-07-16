@@ -133,7 +133,6 @@ def throw_error(verify_result):
     if verify_result == "T":
         st.rerun()
 
-
 for message in st.session_state.messages:
     role = '🩺' if message[0] == 'ai' else message[0]
     with st.chat_message(role):
@@ -185,5 +184,6 @@ if userinput := st.chat_input("메시지를 입력해주세요."):
             st.session_state.messages.append(('ai','답변해주셔서 감사합니다. 환자분께서 말씀해주신 것을 요약해보겠습니다.\n\n'+st.session_state.additional_information + '\n\n해당 내용이 맞다면 등록하기 버튼을 눌러주세요.'))
             if st.button("등록하기") :
                 st.info("질문이 등록되었습니다.", icon="✅")
+                st.switch_page("A_helper.py")
     
     
