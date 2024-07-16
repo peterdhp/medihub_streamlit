@@ -60,7 +60,7 @@ ALL the questions in the list MUST be asked.
 HOWEVER, when the patient information doesn't match the content of the question, skip the question. For example, don't ask appenditis related question for patient with appendectomy history.
 If there are no questions in the question list. Assume no additional questions are needed. 
 If there are no more questions to be asked, please output <|endofQuestion|>. Do not answer the initial question.
-When asked to summarize, please summarize what the patient said in the chat. Give the output in Korean and a list, only output the list.:
+When asked to summarize, please summarize and rephrase what the patient said in the chat. Give the output in Korean and a list, only output the list.:
     
     [initial question]
     {question}
