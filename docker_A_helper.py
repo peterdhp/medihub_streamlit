@@ -13,7 +13,6 @@ from langchain_community.callbacks import get_openai_callback
 import cohere
 from langchain_core.documents import Document
 from langchain.tools.tavily_search import TavilySearchResults
-from menu_streamlit import menu_with_redirect
 
 
 from langsmith import traceable
