@@ -10,6 +10,7 @@ from langchain_core.runnables import (
     RunnablePassthrough,
 )
 import os
+from operator import itemgetter
 from langsmith import traceable
 
 
@@ -89,13 +90,13 @@ def question_generator(model):
     number_output_parser = NumberedListOutputParser()
     format_instructions=number_output_parser.get_format_instructions()
     prompt_addQ = ChatPromptTemplate.from_messages([
-        ("system", "You are a Korean doctor consulting a patient. When given a medical complaint, ask questions that would help you answer the question. The maximum number of questions should be 5. If no question need to be asked, output empty list. \n{}".format(format_instructions)),
+        ("system", "You are a Korean doctor consulting a patient. When given a medical complaint, ask questions that would help you answer the question. The number of questions should be 1 to 5. \n{}".format(format_instructions)),
         ("user", "\n{question}")
     ])
 
     prompt_verify = ChatPromptTemplate.from_messages([
-        ("system", "Verify whether a question is a medical related question or not. Simply, output T if it's medical related and F if it isn't. no need to explain"),
-        ("user", "\n{question}")
+        ("system", "Given a main question and sub questions, verify whether the main question is a medical related question or not. Simply, output T if it's medical related and F if it isn't. no need to explain"),
+        ("user", "\n[Main question]\n{question}n\n[Sub question]\n{addQ}")#\n\n[Sub question]\n{addQ}
     ])
 
     llm4o = ChatOpenAI(model_name=model, temperature = 0)
@@ -107,10 +108,16 @@ def question_generator(model):
     chain_addQ = prompt_addQ | llm4o | number_output_parser
     chain_verify = prompt_verify | llm4o | StrOutputParser()
 
-    chain = RunnableParallel(
+    # chain = (RunnableParallel(
+    #     verify = chain_verify,
+    #     addQ = chain_addQ,
+    # ))
+
+    chain = (RunnableParallel(
         addQ = chain_addQ,
-        verify = chain_verify
-    ) 
+        question = itemgetter('question'),
+    ).assign(verify = chain_verify, addQ = itemgetter('addQ'))
+    .pick(['addQ','verify']))
     return chain
     
     
@@ -161,8 +168,14 @@ if userinput := st.chat_input("메시지를 입력해주세요."):
         
     if len(st.session_state.messages) == 3 :
         st.session_state.question  = userinput
-        response = question_generator('gpt-4o').invoke(st.session_state.question)
+        with st.spinner(text="질문을 살펴보고 있습니다. 잠시만 기다려주시면 감사하겠습니다. (예상 소요 시간 : 5초)"):
+            response = question_generator('gpt-4o').invoke({'question' : st.session_state.question})
+        print(response)
         st.session_state.add_question = response['addQ']
+        
+        st.session_state.messages.append(('ai','기다려주셔서 감사합니다. 더 정확한 답변을 드릴 수 있도록 몇가지 추가로 여쭙도록 하겠습니다.' ))
+        with st.chat_message("🩺"):
+            st.markdown('기다려주셔서 감사합니다. 더 정확한 답변을 드릴 수 있도록 몇가지 추가로 여쭙도록 하겠습니다.')
         if response['verify'] == "F":
             throw_error(response['verify'])
             st.stop()
