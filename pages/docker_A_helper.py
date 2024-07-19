@@ -133,8 +133,9 @@ if 'additional_information' not in st.session_state:
 5. 현재 예약된 병원의 시술 대기 시간이 긴 이유에 대해 설명을 듣지 못함"""
 # if 'CC' not in st.session_state:
 #     st.switch_page('app_streamlit.py')
-
-st.session_state.question_full = st.session_state.question + '\n\n' +  st.session_state.additional_information
+if 'question_full' not in st.session_state:
+    
+    st.session_state.question_full = st.session_state.question + '\n\n' +  st.session_state.additional_information
 
 with st.form(key='response'):
     st.text_area('질문 및 추가정보', height=200, key='question_full')
