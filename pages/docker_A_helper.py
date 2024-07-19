@@ -141,7 +141,7 @@ with st.form(key='response'):
     submitted = st.form_submit_button('질문 등록')
     if submitted :   
         chain = generate_reponse()
-        st.session_state.temp_answer = chain.invoke({"question" : st.session_state.question})
+        st.session_state.temp_answer = chain.invoke({"question" : st.session_state.question_full})
         
     
         st.text_area('답변', value=st.session_state.temp_answer['response'], height=300, key='answer_text')
